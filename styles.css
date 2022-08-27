@@ -1,8 +1,12 @@
+@font-face {
+    font-family: 'seven segment';
+    src: url(./Seven\ Segment\ copy.ttf);
+}
 body{
     background-image: url('./img/roman-mager-5mZ_M06Fc9g-unsplash.jpg');
     background-position: center;
     background-size: cover;
-    font-family:Arial, Helvetica, sans-serif;
+    font-family: Arial, Helvetica, sans-serif;
     user-select: none;
     height: 100%;
     margin: 0;
@@ -60,6 +64,7 @@ body{
     border-width: 4px;
 
     margin-top: 50px;
+    width: 307px;
     margin-bottom: 10px;
     
     display: flex;
@@ -70,10 +75,24 @@ body{
 .screen{
     width: auto;
     background-color: rgb(255, 253, 247);
+    font-family: seven segment, Arial, Helvetica, sans-serif;
     height: 120px;
     border-radius: 30px;
     border-style: solid;
     border-width: 4px;
+    
+    display: flex;
+    flex-direction: column;
+    /* justify-content: space-around; */
+}
+
+.currentValue{
+    font-size: 40px;
+    margin-left: 20px;
+    margin-top: auto;
+    margin-bottom: 20px;
+    width: 259px;
+    height: auto;
 }
 
 .button{
@@ -108,6 +127,7 @@ body{
     margin-top: auto;
     margin-bottom: 25px;
     font-size: 20px;
+    font-family: seven segment, Arial, Helvetica, sans-serif;
     color: #ffd000;
 }
 
