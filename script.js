@@ -1,4 +1,4 @@
-
+//addEventListeners
 
 //Functions
 function add(num1, num2){
@@ -34,6 +34,6 @@ function operate(operator, num1, num2){
             answer = divide(num1, num2);
             break;
     }
-    
+
     return answer;
 }
