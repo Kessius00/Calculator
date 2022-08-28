@@ -2,6 +2,8 @@
 const nums = document.querySelectorAll('.num');
 const screen = document.querySelector('.screen');
 const currentValueDisplay = document.querySelector('.currentValue');
+const backgroundValue = document.querySelector('.backgroundValue');
+
 const operators = document.querySelectorAll('.operator');
 const equalSign = document.querySelector('.equal');
 
@@ -25,23 +27,16 @@ nums.forEach((num)=>{
 
 operators.forEach((operator)=>{
     operator.addEventListener('click',()=>{
+        //locking firstNum in place
         firstNum = Number(currentScreenValue);
-        currentScreenValue = '';
-        currentValueDisplay.textContent = '';
-        switch(operator.textContent){
-            case '+':
-                currentOperator = 'add';
-                break;
-            case '-':
-                currentOperator = 'subtract';
-                break;
-            case '×':
-                currentOperator = 'multiply';
-                break;
-            case '÷':
-                currentOperator = 'divide';
-                break;
-        };
+        console.log(`First number is: ${firstNum}`);
+
+        //locking current operator
+        currentOperator = operatorChoice(operator);
+        console.log(`Current operator: ${currentOperator}`);
+
+        //dojdodjd
+
     });
 });
 
@@ -49,10 +44,10 @@ equalSign.addEventListener('click', ()=>{
     secondNum = Number(currentScreenValue);
     answer = operate(currentOperator, firstNum, secondNum);
     currentValueDisplay.textContent = answer;
-    firstNum = answer;
+    currentScreenValue = answer;
 });
 
-//removes
+//REMOVING DATA
 allClear.addEventListener('click', ()=>{
     currentScreenValue = '';
     currentValueDisplay.textContent = currentScreenValue;
@@ -67,26 +62,26 @@ deleteChar.addEventListener('click', ()=>{
 
 });
 
+//Object
+function calculation(firstNum){
+    this.num1 = firstNum;
+    this.operator = currentOperator;
+
+}
 
 //Functions
-
-
 function add(num1, num2){
     return num1 + num2;
 }
-
 function subtract(num1, num2){
     return num1 - num2;
 }
-
 function multiply(num1, num2){
     return num1*num2;
 }
-
 function divide(num1, num2){
     return num1/num2;
 }
-
 function operate(operator, num1, num2){
     let answer;
 
@@ -107,3 +102,29 @@ function operate(operator, num1, num2){
 
     return answer;
 }
+
+function operatorChoice(operatorSymbol){
+    let currentOperation;
+    switch(operatorSymbol.textContent){
+    case '+':
+        currentOperation = 'add';
+        break;
+    case '-':
+        currentOperation = 'subtract';
+        break;
+    case '×':
+        currentOperation = 'multiply';
+        break;
+    case '÷':
+        currentOperation = 'divide';
+        break;
+    };
+    return currentOperation;
+}
+
+
+
+
+// firstNum = Number(currentScreenValue);
+//         currentScreenValue = '';
+//         currentValueDisplay.textContent = '';
