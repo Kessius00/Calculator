@@ -4,6 +4,10 @@ const screen = document.querySelector('.screen');
 const currentValueDisplay = document.querySelector('.currentValue');
 const operators = document.querySelectorAll('.operator');
 const equalSign = document.querySelector('.equal');
+
+const allClear = document.querySelector('.allClear');
+const deleteChar = document.querySelector('.deleteChar');
+
 let currentOperator;
 let currentScreenValue = '';
 let firstNum;
@@ -44,10 +48,22 @@ operators.forEach((operator)=>{
 equalSign.addEventListener('click', ()=>{
     secondNum = Number(currentScreenValue);
     answer = operate(currentOperator, firstNum, secondNum);
-    console.log(answer);
+    currentValueDisplay.textContent = answer;
+    firstNum = answer;
 });
 
+//removes
+allClear.addEventListener('click', ()=>{
+    currentScreenValue = '';
+    currentValueDisplay.textContent = currentScreenValue;
 
+});
+
+// deleteChar.addEventListener('click', ()=>{
+//     currentScreenValue = (currentScreenValue).split('').pop().toString();
+//     currentValueDisplay.textContent = currentScreenValue;
+
+// });
 
 
 //Functions
