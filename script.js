@@ -59,11 +59,13 @@ allClear.addEventListener('click', ()=>{
 
 });
 
-// deleteChar.addEventListener('click', ()=>{
-//     currentScreenValue = (currentScreenValue).split('').pop().toString();
-//     currentValueDisplay.textContent = currentScreenValue;
+deleteChar.addEventListener('click', ()=>{
+    let currentValueArray = (currentScreenValue).split('')
+    currentValueArray.pop()
+    currentScreenValue = currentValueArray.join('');
+    currentValueDisplay.textContent = currentScreenValue;
 
-// });
+});
 
 
 //Functions
