@@ -1,6 +1,6 @@
 //Constants
 const nums = document.querySelectorAll('.num');
-// const screen = document.querySelector('.screen');
+
 const currentValueDisplay = document.querySelector('.currentValue');
 const backgroundValue = document.querySelector('.backgroundValue');
 
@@ -17,14 +17,22 @@ let secondNum = 0;
 let answer;
 
 currentValueDisplay.textContent = firstNum;
+
 //addEventListeners
 nums.forEach((num)=>{
     num.addEventListener('click', ()=>{
-        if (!currentValueDisplay.textContent){
-            currentScreenValue.textContent = '';
-        }
-        currentScreenValue+=(num.textContent);
-        currentValueDisplay.textContent = currentScreenValue;
+
+        if (currentValueDisplay.textContent.length<13){
+            //If the number is not to big (13 chars), operate
+            //ADD number to currentScreenValue (string)
+            currentScreenValue+=(num.textContent);
+
+            //Change main display to CurrentScreenValue
+            currentValueDisplay.textContent = currentScreenValue;
+
+        } else {
+            currentValueDisplay.textContent = 'Number too long!'
+        };
     });
 });
 
@@ -33,15 +41,16 @@ operators.forEach((operator)=>{
         //locking firstNum in place
         if (!firstNum){
             firstNum = Number(currentScreenValue);
+
         } else {
             //if you want to chain calculations
             secondNum = Number(currentScreenValue);
+
             if (!answer){
                 firstNum = operate(currentOperator, firstNum, secondNum);
             } else {
                 firstNum = answer;
             } 
-            
         }
         console.log(`First number is: ${firstNum}`);
 
@@ -58,25 +67,8 @@ operators.forEach((operator)=>{
 });
 
 equalSign.addEventListener('click', ()=>{
-    //locking secondNumber in place
-    if (!secondNum || secondNum === answer){
-        secondNum = Number(currentScreenValue);
-    }
     
 
-    if (!currentOperator){
-        currentValueDisplay.textContent = 0;
-        currentScreenValue = '';
-
-    } else {
-    //fetching answer
-    answer = operate(currentOperator, firstNum, secondNum);
-
-    console.log(firstNum, currentOperator, secondNum, answer);
-
-    currentValueDisplay.textContent = answer;
-    currentScreenValue = answer;
-    }
 });
 
 
@@ -92,19 +84,17 @@ allClear.addEventListener('click', ()=>{
 });
 
 deleteChar.addEventListener('click', ()=>{
-    let currentValueArray = (currentScreenValue).split('')
-    currentValueArray.pop()
-    currentScreenValue = currentValueArray.join('');
-    currentValueDisplay.textContent = currentScreenValue;
+    if (Number(currentValueDisplay.textContent) === answer){
+        alert('whoops');
+    } else {
+        let currentValueArray = (currentScreenValue).split('')
+        currentValueArray.pop();
+        currentScreenValue = currentValueArray.join('');
+        currentValueDisplay.textContent = currentScreenValue;
+    }
 
 });
 
-//Object
-function calculation(firstNum){
-    this.num1 = firstNum;
-    this.operator = currentOperator;
-
-}
 
 //Functions
 function add(num1, num2){
@@ -160,3 +150,31 @@ function operatorChoice(operatorSymbol){
 
 
 
+
+    // if ((!secondNum || secondNum === answer) && (firstNum)){
+    //     // If first calculation and firstNum != 0                  
+    //     secondNum = Number(currentScreenValue);
+    // } 
+
+    // if (!currentOperator){
+    //     //No operator selected means no secondNumber so only a number 
+    //     currentValueDisplay.textContent = secondNum;
+    // } else {
+    //     //operator selected
+    //     if ((currentOperator === 'divide') && (secondNum === 0)){
+    //         //No dividing by 0
+    //         currentValueDisplay.textContent = 'Infinity!';
+    //         firstNum = 0;
+    //         secondNum = 0;
+    //     } else {
+    //         //fetching answer with operator, first and second number
+    //         answer = operate(currentOperator, firstNum, secondNum);
+    //         console.log(firstNum, currentOperator, secondNum, answer);
+
+    //         //Change main value display and smaller display to the answer
+    //         currentValueDisplay.textContent = answer;
+    //         backgroundValue.textContent = answer;
+    //     }
+    // }
+
+    // currentScreenValue = '';
