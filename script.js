@@ -1,6 +1,6 @@
 //Constants
 const nums = document.querySelectorAll('.num');
-const screen = document.querySelector('.screen');
+// const screen = document.querySelector('.screen');
 const currentValueDisplay = document.querySelector('.currentValue');
 const backgroundValue = document.querySelector('.backgroundValue');
 
@@ -12,14 +12,17 @@ const deleteChar = document.querySelector('.deleteChar');
 
 let currentOperator;
 let currentScreenValue = '';
-let firstNum;
-let secondNum;
+let firstNum = 0;
+let secondNum = 0;
 let answer;
 
-
+currentValueDisplay.textContent = firstNum;
 //addEventListeners
 nums.forEach((num)=>{
     num.addEventListener('click', ()=>{
+        if (!currentValueDisplay.textContent){
+            currentScreenValue.textContent = '';
+        }
         currentScreenValue+=(num.textContent);
         currentValueDisplay.textContent = currentScreenValue;
     });
@@ -28,29 +31,63 @@ nums.forEach((num)=>{
 operators.forEach((operator)=>{
     operator.addEventListener('click',()=>{
         //locking firstNum in place
-        firstNum = Number(currentScreenValue);
+        if (!firstNum){
+            firstNum = Number(currentScreenValue);
+        } else {
+            //if you want to chain calculations
+            secondNum = Number(currentScreenValue);
+            if (!answer){
+                firstNum = operate(currentOperator, firstNum, secondNum);
+            } else {
+                firstNum = answer;
+            } 
+            
+        }
         console.log(`First number is: ${firstNum}`);
 
         //locking current operator
         currentOperator = operatorChoice(operator);
         console.log(`Current operator: ${currentOperator}`);
 
-        //dojdodjd
+        //ridding the screen of firstNum
+        currentScreenValue = '';
+        backgroundValue.textContent = firstNum + ' ' + operator.textContent;
+        currentValueDisplay.textContent = '';
 
     });
 });
 
 equalSign.addEventListener('click', ()=>{
-    secondNum = Number(currentScreenValue);
+    //locking secondNumber in place
+    if (!secondNum || secondNum === answer){
+        secondNum = Number(currentScreenValue);
+    }
+    
+
+    if (!currentOperator){
+        currentValueDisplay.textContent = 0;
+        currentScreenValue = '';
+
+    } else {
+    //fetching answer
     answer = operate(currentOperator, firstNum, secondNum);
+
+    console.log(firstNum, currentOperator, secondNum, answer);
+
     currentValueDisplay.textContent = answer;
     currentScreenValue = answer;
+    }
 });
+
 
 //REMOVING DATA
 allClear.addEventListener('click', ()=>{
     currentScreenValue = '';
     currentValueDisplay.textContent = currentScreenValue;
+    backgroundValue.textContent = '';
+    firstNum = 0;
+    secondNum = 0;
+    currentValueDisplay.textContent = firstNum;
 
 });
 
@@ -102,7 +139,6 @@ function operate(operator, num1, num2){
 
     return answer;
 }
-
 function operatorChoice(operatorSymbol){
     let currentOperation;
     switch(operatorSymbol.textContent){
@@ -124,7 +160,3 @@ function operatorChoice(operatorSymbol){
 
 
 
-
-// firstNum = Number(currentScreenValue);
-//         currentScreenValue = '';
-//         currentValueDisplay.textContent = '';
