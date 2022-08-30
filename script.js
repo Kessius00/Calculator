@@ -10,11 +10,12 @@ const equalSign = document.querySelector('.equal');
 const allClear = document.querySelector('.allClear');
 const deleteChar = document.querySelector('.deleteChar');
 
-let currentOperator;
+let currentOperator = '';
 let currentScreenValue = '';
 let firstNum = 0;
 let secondNum = 0;
-let answer;
+let mainScreenText = currentValueDisplay.textContent;
+let answer = 0;
 
 currentValueDisplay.textContent = firstNum;
 
@@ -23,10 +24,12 @@ nums.forEach((num)=>{
     num.addEventListener('click', ()=>{
 
         if (currentValueDisplay.textContent.length<13){
+            if (answer){
+                answer = 0;
+            }
             //If the number is not to big (13 chars), operate
             //ADD number to currentScreenValue (string)
             currentScreenValue+=(num.textContent);
-
             //Change main display to CurrentScreenValue
             currentValueDisplay.textContent = currentScreenValue;
 
@@ -38,37 +41,67 @@ nums.forEach((num)=>{
 
 operators.forEach((operator)=>{
     operator.addEventListener('click',()=>{
-        //locking firstNum in place
+        // locking firstNum in place
         if (!firstNum){
             firstNum = Number(currentScreenValue);
-
-        } else {
+        } else if (!secondNum){
             //if you want to chain calculations
             secondNum = Number(currentScreenValue);
 
             if (!answer){
-                firstNum = operate(currentOperator, firstNum, secondNum);
-            } else {
+                //if no answer, make firstNum equal to first answer 
+                answer = operate(currentOperator, firstNum, secondNum);
                 firstNum = answer;
             } 
         }
-        console.log(`First number is: ${firstNum}`);
 
-        //locking current operator
+        //locking next operator
         currentOperator = operatorChoice(operator);
-        console.log(`Current operator: ${currentOperator}`);
 
         //ridding the screen of firstNum
-        currentScreenValue = '';
         backgroundValue.textContent = firstNum + ' ' + operator.textContent;
-        currentValueDisplay.textContent = '';
-
+        currentValueDisplay.textContent = currentScreenValue;
+        answer = 0;
+        secondNum = 0;
+        currentScreenValue = '';
     });
 });
 
 equalSign.addEventListener('click', ()=>{
     
 
+    if (!secondNum){
+    // If first calculation and firstNum != 0                  
+    secondNum = Number(currentScreenValue);
+    } 
+
+    if (currentOperator === ''){
+        //No operator selected means no secondNumber so only a number 
+        currentValueDisplay.textContent = secondNum;
+    } else {
+        //operator selected
+        if ((currentOperator === 'divide') && (!secondNum)){
+            //No dividing by 0
+            currentValueDisplay.textContent = 'Infinity!';
+            firstNum = 0;
+            secondNum = 0;
+            answer = 0;
+        } else {
+            //fetching answer with operator, first and second number
+            //firstNum  currentOperator secondNum
+            //removing currentOperator after final operation
+            answer = operate(currentOperator, firstNum, secondNum);
+            // currentOperator = ''
+
+            //Change main value display and smaller display to the answer
+            currentValueDisplay.textContent = answer;
+            backgroundValue.textContent = answer;
+        }
+    }
+    currentScreenValue = ``;
+    console.log(firstNum, currentOperator, secondNum, answer, currentScreenValue, currentValueDisplay);
+    firstNum = 0;
+    secondNum = 0;
 });
 
 
@@ -79,6 +112,7 @@ allClear.addEventListener('click', ()=>{
     backgroundValue.textContent = '';
     firstNum = 0;
     secondNum = 0;
+    answer = 0;
     currentValueDisplay.textContent = firstNum;
 
 });
