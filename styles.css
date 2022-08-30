@@ -56,7 +56,7 @@ body{
     margin-top: auto;
     margin-left: auto;
     margin-right: 20px;
-    font-size: 25px;
+    font-size: 30px;
     
     
 
@@ -105,6 +105,9 @@ body{
     width: 259px;
     height: auto;
     /* background-color: #ffd000; */
+    position: absolute;
+    
+    
 }
 
 

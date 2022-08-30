@@ -68,40 +68,36 @@ operators.forEach((operator)=>{
 });
 
 equalSign.addEventListener('click', ()=>{
-    
-
-    if (!secondNum){
-    // If first calculation and firstNum != 0                  
-    secondNum = Number(currentScreenValue);
+    console.log('inputOfEqualSign', firstNum, currentOperator, secondNum, answer, currentScreenValue);
+    if ((currentOperator === 'divide') && (!secondNum)){
+        //No dividing by 0
+        currentValueDisplay.textContent = 'Infinity!';
+        answer = 0;
     } 
+
 
     if (currentOperator === ''){
         //No operator selected means no secondNumber so only a number 
-        currentValueDisplay.textContent = secondNum;
+        
     } else {
         //operator selected
-        if ((currentOperator === 'divide') && (!secondNum)){
-            //No dividing by 0
-            currentValueDisplay.textContent = 'Infinity!';
-            firstNum = 0;
-            secondNum = 0;
-            answer = 0;
-        } else {
-            //fetching answer with operator, first and second number
-            //firstNum  currentOperator secondNum
-            //removing currentOperator after final operation
-            answer = operate(currentOperator, firstNum, secondNum);
-            // currentOperator = ''
+        
+    
+        //fetching answer with operator, first and second number
+        //firstNum  currentOperator secondNum
+        //removing currentOperator after final operation
+        answer = operate(currentOperator, firstNum, secondNum);
+        // currentOperator = ''
 
-            //Change main value display and smaller display to the answer
-            currentValueDisplay.textContent = answer;
-            backgroundValue.textContent = answer;
-        }
+        //Change main value display and smaller display to the answer
+        currentValueDisplay.textContent = answer;
+        backgroundValue.textContent = answer;
+    
     }
     currentScreenValue = ``;
-    console.log(firstNum, currentOperator, secondNum, answer, currentScreenValue, currentValueDisplay);
     firstNum = 0;
     secondNum = 0;
+    console.log('outputOfEqualSign', firstNum, currentOperator, secondNum, answer, currentScreenValue);
 });
 
 
@@ -181,7 +177,6 @@ function operatorChoice(operatorSymbol){
     };
     return currentOperation;
 }
-
 
 
 
