@@ -10,11 +10,12 @@ const equalSign = document.querySelector('.equal');
 const allClear = document.querySelector('.allClear');
 const deleteChar = document.querySelector('.deleteChar');
 
+
 let currentOperator = '';
 let currentScreenValue = '';
 let firstNum = 0;
 let secondNum = 0;
-let mainScreenText = currentValueDisplay.textContent;
+// let mainScreenText = currentValueDisplay.textContent;
 let answer = 0;
 
 currentValueDisplay.textContent = firstNum;
@@ -42,6 +43,10 @@ nums.forEach((num)=>{
 operators.forEach((operator)=>{
     operator.addEventListener('click',()=>{
         // locking firstNum in place
+        if ((firstNum == answer)){
+            console.log('afterdakr')
+        }
+
         if (!firstNum){
             firstNum = Number(currentScreenValue);
         } else if (!secondNum){
@@ -54,6 +59,9 @@ operators.forEach((operator)=>{
                 firstNum = answer;
             } 
         }
+
+        
+
 
         //locking next operator
         currentOperator = operatorChoice(operator);
@@ -69,35 +77,25 @@ operators.forEach((operator)=>{
 
 equalSign.addEventListener('click', ()=>{
     console.log('inputOfEqualSign', firstNum, currentOperator, secondNum, answer, currentScreenValue);
-    if ((currentOperator === 'divide') && (!secondNum)){
-        //No dividing by 0
-        currentValueDisplay.textContent = 'Infinity!';
-        answer = 0;
-    } 
-
-
-    if (currentOperator === ''){
-        //No operator selected means no secondNumber so only a number 
-        
-    } else {
-        //operator selected
-        
     
-        //fetching answer with operator, first and second number
-        //firstNum  currentOperator secondNum
-        //removing currentOperator after final operation
-        answer = operate(currentOperator, firstNum, secondNum);
-        // currentOperator = ''
-
-        //Change main value display and smaller display to the answer
-        currentValueDisplay.textContent = answer;
-        backgroundValue.textContent = answer;
-    
+    if (!secondNum){
+        secondNum = Number(currentScreenValue);
     }
-    currentScreenValue = ``;
-    firstNum = 0;
-    secondNum = 0;
+    
+    if (currentOperator){
+        //operator selected
+        answer = operate(currentOperator, firstNum, secondNum);
+        //Change main value display and smaller display to the answer
+        console.log('whileOperation', firstNum, currentOperator, secondNum, answer, currentScreenValue);
+        backgroundValue.textContent = answer;
+        currentValueDisplay.textContent = answer;
+        currentScreenValue = '';
+    }
+    currentOperator = '';
+    firstNum = answer;
     console.log('outputOfEqualSign', firstNum, currentOperator, secondNum, answer, currentScreenValue);
+
+    
 });
 
 
@@ -177,6 +175,16 @@ function operatorChoice(operatorSymbol){
     };
     return currentOperation;
 }
+
+
+
+
+    // //No dividing by 0
+    // if ((currentOperator === 'divide') && (!secondNum)){
+    //     currentValueDisplay.textContent = 'Infinity!';
+    //     answer = 0; };  
+
+
 
 
 
