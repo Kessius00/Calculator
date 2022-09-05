@@ -21,13 +21,23 @@ window.addEventListener('keydown', handleKeyboardInput);
 allClear.addEventListener('click', clear);
 // deleteChar.addEventListener('click', deleteNumber);
 
+operators.forEach((operator)=>{
+    operator.addEventListener('click', ()=>{
+        if (currentOperation !== null && secondNum !== ''){ //for continuing the calculation without equalSign
+            firstNum = operate(currentOperation, Number(firstNum), Number(secondNum)).toString(); 
+            currentValueDisplay.textContent = firstNum;
+            secondNum = '';
+        }
+        operatorChoice(operator.textContent);
+    })
+});
 
 nums.forEach((num)=>{
     num.addEventListener('click', ()=>{
         if (currentValueDisplay.textContent.length<13){
             appendNumber(num.textContent);
         } else {
-            currentValueDisplay.textContent = 'Number too long!'
+            currentValueDisplay.textContent = 'Number too long!';
             clear();
         };
     });
@@ -44,7 +54,7 @@ function clear(){
 }
 
 function appendNumber(num){
-    if (secondNum === ''){
+    if (secondNum === '' && currentOperation === null){
         firstNum += num;
         currentValueDisplay.textContent = firstNum;
     } else if (currentOperation !== null && firstNum !== ''){
@@ -52,7 +62,6 @@ function appendNumber(num){
         currentValueDisplay.textContent = secondNum;
     }
 }
-
 
 function handleKeyboardInput(e){
     
@@ -69,20 +78,24 @@ function handleKeyboardInput(e){
             console.log('escape');
             break;
         case '/':
-            currentOperation = ''
-            console.log('divide');
+            currentOperation = 'divide'
+            console.log(currentOperation);
 
             break;
         case '*':
-            console.log('multiply');
+            currentOperation = 'multiply'
+            console.log(currentOperation);
+
 
             break;
         case '+':
-            console.log('plus');
+            currentOperation = 'add'
+            console.log(currentOperation);
 
             break;
         case '-':
-            console.log('minus');
+            currentOperation = 'subtract'
+            console.log(currentOperation);
 
             break; 
         
@@ -111,8 +124,7 @@ function operate(operator, num1, num2){
 }
 
 function operatorChoice(operatorSymbol){
-    let currentOperation;
-    switch(operatorSymbol.textContent){
+    switch(operatorSymbol){
     case '+':
         currentOperation = 'add';
         break;
@@ -126,9 +138,10 @@ function operatorChoice(operatorSymbol){
         currentOperation = 'divide';
         break;
     };
-    return currentOperation;
 }
 
+
+//operations
 function add(num1, num2){
     return num1 + num2;
 }
