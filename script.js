@@ -4,6 +4,7 @@ const operators = document.querySelectorAll('.operator');
 const equalSign = document.querySelector('.equal');
 const allClear = document.querySelector('.allClear');
 const deleteChar = document.querySelector('.deleteChar');
+const dot = document.querySelector('.dot');
 
 const currentValueDisplay = document.querySelector('.currentValue');
 const backgroundValue = document.querySelector('.backgroundValue');
@@ -22,7 +23,11 @@ window.addEventListener('keydown', handleKeyboardInput);
 equalSign.addEventListener('click', evaluate);
 allClear.addEventListener('click', clear);
 // deleteChar.addEventListener('click', deleteNumber);
-
+dot.addEventListener('click', ()=>{
+    if (currentValueDisplay.textContent.includes('.')) return 
+    appendNumber('.');
+    lastButtonPressed = '.';
+})
 operators.forEach((operator)=>{
     operator.addEventListener('click', ()=>{
         if (currentOperation !== null && secondNum !== ''){ //for continuing the calculation without equalSign
@@ -32,6 +37,7 @@ operators.forEach((operator)=>{
         }
         operatorChoice(operator.textContent);
         lastButtonPressed = operator.textContent;
+        backgroundValue.textContent = firstNum + ' ' + operator.textContent;
     })
 });
 
@@ -53,11 +59,15 @@ nums.forEach((num)=>{
 //Functions
 function evaluate(){
     if (currentOperation === null) return 
-    let answer = operate(currentOperation, Number(firstNum), Number(secondNum)).toString();
+    let answer = round(operate(currentOperation, Number(firstNum), Number(secondNum))).toString();
     clear();
     currentValueDisplay.textContent = answer;
     firstNum = answer;
     lastButtonPressed = '=';
+}
+function round(num){
+    num *= 10**9;
+    return Math.round(num)/(10**9)
 }
 
 function clear(){
