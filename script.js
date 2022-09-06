@@ -53,6 +53,7 @@ function doOperation(operatorChosen){
         currentValueDisplay.textContent = firstNum;
         secondNum = '';
     }
+    
     lastButtonPressed = operatorChosen;
     if (operatorChosen == 'add') operatorChosen = '+';
     if (operatorChosen == 'subtract') operatorChosen = '-';

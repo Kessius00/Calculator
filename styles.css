@@ -59,9 +59,6 @@ body{
     font-size: 30px;
     color: rgb(99, 93, 12);
 
-    
-    color: crimson;
-
 }
 
 .clearBtn:active{
@@ -106,7 +103,6 @@ body{
     margin-bottom: 12px;
     width: 259px;
     height: auto;
-    /* background-color: #ffd000; */
     position: absolute;
     
     
@@ -154,7 +150,7 @@ body{
 }
 .equal:active{
     transform: scale(0.96);
-    background-color: #87dba9;
+    background-color: #4d9469;
 }
 
 .buttons{
