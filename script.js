@@ -1,142 +1,147 @@
 //Constants
 const nums = document.querySelectorAll('.num');
+const operators = document.querySelectorAll('.operator');
+const equalSign = document.querySelector('.equal');
+const allClear = document.querySelector('.allClear');
+const deleteCharButton = document.querySelector('.deleteChar');
+const dot = document.querySelector('.dot');
 
 const currentValueDisplay = document.querySelector('.currentValue');
 const backgroundValue = document.querySelector('.backgroundValue');
 
-const operators = document.querySelectorAll('.operator');
-const equalSign = document.querySelector('.equal');
 
-const allClear = document.querySelector('.allClear');
-const deleteChar = document.querySelector('.deleteChar');
+let firstNum = '';
+let secondNum = '';
+let currentOperation = null;
+let lastButtonPressed = null;
+let operatorChosen;
 
 
-let currentOperator = '';
-let currentScreenValue = '';
-let firstNum = 0;
-let secondNum = 0;
-// let mainScreenText = currentValueDisplay.textContent;
-let answer = 0;
-
-currentValueDisplay.textContent = firstNum;
 
 //addEventListeners
-nums.forEach((num)=>{
-    num.addEventListener('click', ()=>{
 
-        if (currentValueDisplay.textContent.length<13){
-            if (answer){
-                answer = 0;
-            }
-            //If the number is not to big (13 chars), operate
-            //ADD number to currentScreenValue (string)
-            currentScreenValue+=(num.textContent);
-            //Change main display to CurrentScreenValue
-            currentValueDisplay.textContent = currentScreenValue;
+window.addEventListener('keydown', handleKeyboardInput);
+equalSign.addEventListener('click', evaluate);
+allClear.addEventListener('click', clear);
+deleteCharButton.addEventListener('click', deleteChar);
 
-        } else {
-            currentValueDisplay.textContent = 'Number too long!'
-        };
-    });
-});
+dot.addEventListener('click', addDot);
 
 operators.forEach((operator)=>{
-    operator.addEventListener('click',()=>{
-        // locking firstNum in place
-        if ((firstNum == answer)){
-            console.log('afterdakr')
-        }
+    operator.addEventListener('click', ()=>{
+        operatorChoice(operator.textContent);
+        doOperation(operator.textContent);
+    })
+});
 
-        if (!firstNum){
-            firstNum = Number(currentScreenValue);
-        } else if (!secondNum){
-            //if you want to chain calculations
-            secondNum = Number(currentScreenValue);
-
-            if (!answer){
-                //if no answer, make firstNum equal to first answer 
-                answer = operate(currentOperator, firstNum, secondNum);
-                firstNum = answer;
-            } 
-        }
-
-        
-
-
-        //locking next operator
-        currentOperator = operatorChoice(operator);
-
-        //ridding the screen of firstNum
-        backgroundValue.textContent = firstNum + ' ' + operator.textContent;
-        currentValueDisplay.textContent = currentScreenValue;
-        answer = 0;
-        secondNum = 0;
-        currentScreenValue = '';
+nums.forEach((num)=>{
+    num.addEventListener('click', ()=>{
+        if (currentValueDisplay.textContent.length<13){
+            appendNumber(num.textContent);
+        } else {
+            clear();
+            currentValueDisplay.textContent = 'Number too long!';
+        };
+        lastButtonPressed = num.textContent;
     });
 });
 
-equalSign.addEventListener('click', ()=>{
-    console.log('inputOfEqualSign', firstNum, currentOperator, secondNum, answer, currentScreenValue);
-    
-    if (!secondNum){
-        secondNum = Number(currentScreenValue);
-    }
-    
-    if (currentOperator){
-        //operator selected
-        answer = operate(currentOperator, firstNum, secondNum);
-        //Change main value display and smaller display to the answer
-        console.log('whileOperation', firstNum, currentOperator, secondNum, answer, currentScreenValue);
-        backgroundValue.textContent = answer;
-        currentValueDisplay.textContent = answer;
-        currentScreenValue = '';
-    }
-    currentOperator = '';
-    firstNum = answer;
-    console.log('outputOfEqualSign', firstNum, currentOperator, secondNum, answer, currentScreenValue);
-
-    
-});
-
-
-//REMOVING DATA
-allClear.addEventListener('click', ()=>{
-    currentScreenValue = '';
-    currentValueDisplay.textContent = currentScreenValue;
-    backgroundValue.textContent = '';
-    firstNum = 0;
-    secondNum = 0;
-    answer = 0;
-    currentValueDisplay.textContent = firstNum;
-
-});
-
-deleteChar.addEventListener('click', ()=>{
-    if (Number(currentValueDisplay.textContent) === answer){
-        alert('whoops');
-    } else {
-        let currentValueArray = (currentScreenValue).split('')
-        currentValueArray.pop();
-        currentScreenValue = currentValueArray.join('');
-        currentValueDisplay.textContent = currentScreenValue;
-    }
-
-});
-
-
 //Functions
-function add(num1, num2){
-    return num1 + num2;
+function doOperation(operatorChosen){
+    if (currentOperation !== null && secondNum !== ''){ //for continuing the calculation without equalSign
+        firstNum = operate(currentOperation, Number(firstNum), Number(secondNum)).toString(); 
+        currentValueDisplay.textContent = firstNum;
+        secondNum = '';
+    }
+    lastButtonPressed = operatorChosen;
+    if (operatorChosen == 'add') operatorChosen = '+';
+    if (operatorChosen == 'subtract') operatorChosen = '-';
+    if (operatorChosen == 'divide') operatorChosen = '÷';
+    if (operatorChosen == 'multiply') operatorChosen = '×';
+    backgroundValue.textContent = firstNum + ' ' + operatorChosen;
 }
-function subtract(num1, num2){
-    return num1 - num2;
+
+function evaluate(){
+    if (currentOperation === null) return 
+    if ( currentOperation === 'divide' && Number(secondNum) === 0){
+        currentValueDisplay.textContent = 'Dividing by zero: infinity!';
+        backgroundValue.textContent = '';
+    } else {
+        let answer = round(operate(currentOperation, Number(firstNum), Number(secondNum))).toString();
+        clear();
+        currentValueDisplay.textContent = answer;
+        firstNum = answer;
+        lastButtonPressed = '=';
+    }
 }
-function multiply(num1, num2){
-    return num1*num2;
+
+function addDot(){
+    if (currentValueDisplay.textContent.includes('.')) return
+    appendNumber('.');
+    lastButtonPressed = '.';
 }
-function divide(num1, num2){
-    return num1/num2;
+
+function round(num){
+    num *= 10**9;
+    return Math.round(num)/(10**9)
 }
+
+function deleteChar(){
+    if (lastButtonPressed === '='){
+        clear();
+    } else {
+        let currentValueArray;
+        if (secondNum === '' && currentOperation === null){
+            currentValueArray = (firstNum).split('')
+            currentValueArray.pop();
+            currentValueDisplay.textContent = currentValueArray.join('');
+            firstNum = currentValueDisplay.textContent;
+        } else if (currentOperation !== null && firstNum !== ''){
+            currentValueArray = (secondNum).split('')
+            currentValueArray.pop();
+            currentValueDisplay.textContent = currentValueArray.join('');
+            secondNum = currentValueDisplay.textContent;
+        }
+    }
+}
+
+
+function clear(){
+    firstNum = '';
+    secondNum = '';
+    currentOperation = null;
+    backgroundValue.textContent = '';
+    currentValueDisplay.textContent = '';
+    lastButtonPressed = 'cl';
+}
+
+function appendNumber(num){
+    if (lastButtonPressed === '='){
+        clear();
+    } 
+    if (secondNum === '' && currentOperation === null){
+        firstNum += num;
+        currentValueDisplay.textContent = firstNum;
+    } else if (currentOperation !== null && firstNum !== ''){
+        secondNum += num;
+        currentValueDisplay.textContent = secondNum;
+    }
+}
+
+function handleKeyboardInput(e){
+    if (e.key >= 0 && e.key <=9) appendNumber(e.key);
+    if (e.key === 'Enter') evaluate();
+    if (e.key === 'Escape') clear();
+    if (e.key === 'Backspace') deleteChar();
+    if (e.key === '.') addDot();
+    if (e.key === ',') addDot();
+    if (e.key === '/') {doOperation('divide'); currentOperation = 'divide';}
+    if (e.key === '*') {doOperation('multiply'); currentOperation = 'multiply';}
+    if (e.key === '+') {doOperation('add'); currentOperation = 'add';}
+    if (e.key === '-') {doOperation('subtract'); currentOperation = 'subtract';}
+}
+
+
 function operate(operator, num1, num2){
     let answer;
 
@@ -157,9 +162,9 @@ function operate(operator, num1, num2){
 
     return answer;
 }
+
 function operatorChoice(operatorSymbol){
-    let currentOperation;
-    switch(operatorSymbol.textContent){
+    switch(operatorSymbol){
     case '+':
         currentOperation = 'add';
         break;
@@ -173,45 +178,22 @@ function operatorChoice(operatorSymbol){
         currentOperation = 'divide';
         break;
     };
-    return currentOperation;
 }
 
 
+//operations
+function add(num1, num2){
+    return num1 + num2;
+}
 
+function subtract(num1, num2){
+    return num1 - num2;
+}
 
-    // //No dividing by 0
-    // if ((currentOperator === 'divide') && (!secondNum)){
-    //     currentValueDisplay.textContent = 'Infinity!';
-    //     answer = 0; };  
+function multiply(num1, num2){
+    return num1*num2;
+}
 
-
-
-
-
-    // if ((!secondNum || secondNum === answer) && (firstNum)){
-    //     // If first calculation and firstNum != 0                  
-    //     secondNum = Number(currentScreenValue);
-    // } 
-
-    // if (!currentOperator){
-    //     //No operator selected means no secondNumber so only a number 
-    //     currentValueDisplay.textContent = secondNum;
-    // } else {
-    //     //operator selected
-    //     if ((currentOperator === 'divide') && (secondNum === 0)){
-    //         //No dividing by 0
-    //         currentValueDisplay.textContent = 'Infinity!';
-    //         firstNum = 0;
-    //         secondNum = 0;
-    //     } else {
-    //         //fetching answer with operator, first and second number
-    //         answer = operate(currentOperator, firstNum, secondNum);
-    //         console.log(firstNum, currentOperator, secondNum, answer);
-
-    //         //Change main value display and smaller display to the answer
-    //         currentValueDisplay.textContent = answer;
-    //         backgroundValue.textContent = answer;
-    //     }
-    // }
-
-    // currentScreenValue = '';
+function divide(num1, num2){
+    return num1/num2;
+}

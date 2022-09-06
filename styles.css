@@ -57,6 +57,8 @@ body{
     margin-left: auto;
     margin-right: 20px;
     font-size: 30px;
+    color: rgb(99, 93, 12);
+
     
     color: crimson;
 
@@ -152,7 +154,7 @@ body{
 }
 .equal:active{
     transform: scale(0.96);
-    background-color: #dab201;
+    background-color: #87dba9;
 }
 
 .buttons{
