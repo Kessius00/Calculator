@@ -12,12 +12,14 @@ const backgroundValue = document.querySelector('.backgroundValue');
 let firstNum = '';
 let secondNum = '';
 let currentOperation = null;
+let lastButtonPressed = null;
+
 
 
 //addEventListeners
 
 window.addEventListener('keydown', handleKeyboardInput);
-// equalSign.addEventListener('click', evaluate);
+equalSign.addEventListener('click', evaluate);
 allClear.addEventListener('click', clear);
 // deleteChar.addEventListener('click', deleteNumber);
 
@@ -29,21 +31,34 @@ operators.forEach((operator)=>{
             secondNum = '';
         }
         operatorChoice(operator.textContent);
+        lastButtonPressed = operator.textContent;
     })
 });
 
 nums.forEach((num)=>{
     num.addEventListener('click', ()=>{
+        if (lastButtonPressed === '='){
+            clear();
+        } 
         if (currentValueDisplay.textContent.length<13){
             appendNumber(num.textContent);
         } else {
-            currentValueDisplay.textContent = 'Number too long!';
             clear();
+            currentValueDisplay.textContent = 'Number too long!';
         };
+        lastButtonPressed = num.textContent;
     });
 });
 
 //Functions
+function evaluate(){
+    if (currentOperation === null) return 
+    let answer = operate(currentOperation, Number(firstNum), Number(secondNum)).toString();
+    clear();
+    currentValueDisplay.textContent = answer;
+    firstNum = answer;
+    lastButtonPressed = '=';
+}
 
 function clear(){
     firstNum = '';
