@@ -22,12 +22,31 @@ let lastButtonPressed = null;
 window.addEventListener('keydown', handleKeyboardInput);
 equalSign.addEventListener('click', evaluate);
 allClear.addEventListener('click', clear);
-// deleteChar.addEventListener('click', deleteNumber);
+deleteChar.addEventListener('click', ()=>{
+    if (lastButtonPressed === '='){
+        clear();
+    } else {
+        let currentValueArray;
+        if (secondNum === '' && currentOperation === null){
+            currentValueArray = (firstNum).split('')
+            currentValueArray.pop();
+            currentValueDisplay.textContent = currentValueArray.join('');
+            firstNum = currentValueDisplay.textContent;
+        } else if (currentOperation !== null && firstNum !== ''){
+            currentValueArray = (secondNum).split('')
+            currentValueArray.pop();
+            currentValueDisplay.textContent = currentValueArray.join('');
+            secondNum = currentValueDisplay.textContent;
+        }
+    }
+});
+
 dot.addEventListener('click', ()=>{
     if (currentValueDisplay.textContent.includes('.')) return 
     appendNumber('.');
     lastButtonPressed = '.';
-})
+});
+
 operators.forEach((operator)=>{
     operator.addEventListener('click', ()=>{
         if (currentOperation !== null && secondNum !== ''){ //for continuing the calculation without equalSign
@@ -65,9 +84,17 @@ function evaluate(){
     firstNum = answer;
     lastButtonPressed = '=';
 }
+
 function round(num){
     num *= 10**9;
     return Math.round(num)/(10**9)
+}
+
+function getCurrentNum(){
+    if (secondNum === '' && currentOperation === null){
+        return firstNum
+    } 
+    return secondNum
 }
 
 function clear(){
