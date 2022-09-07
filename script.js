@@ -77,8 +77,8 @@ function addDot(){
 }
 
 function round(num){
-    num *= 10**9;
-    return Math.round(num)/(10**9)
+    num *= 10**7;
+    return Math.round(num)/(10**7)
 }
 
 function deleteChar(){
@@ -111,7 +111,7 @@ function clear(){
 }
 
 function appendNumber(num){
-    if (currentValueDisplay.textContent.length===13){
+    if (currentValueDisplay.textContent.length>12){
         clear(); currentValueDisplay.textContent = 'Number too long!';
         return
     }
