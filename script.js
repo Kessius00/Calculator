@@ -36,13 +36,7 @@ operators.forEach((operator)=>{
 
 nums.forEach((num)=>{
     num.addEventListener('click', ()=>{
-        if (currentValueDisplay.textContent.length<13){
-            appendNumber(num.textContent);
-        } else {
-            clear();
-            currentValueDisplay.textContent = 'Number too long!';
-        };
-        lastButtonPressed = num.textContent;
+        appendNumber(num.textContent);
     });
 });
 
@@ -117,6 +111,11 @@ function clear(){
 }
 
 function appendNumber(num){
+    if (currentValueDisplay.textContent.length===13){
+        clear(); currentValueDisplay.textContent = 'Number too long!';
+        return
+    }
+
     if (lastButtonPressed === '='){
         clear();
     } 
@@ -127,6 +126,7 @@ function appendNumber(num){
         secondNum += num;
         currentValueDisplay.textContent = secondNum;
     }
+    lastButtonPressed = 'num';
 }
 
 function handleKeyboardInput(e){
