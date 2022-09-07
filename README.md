@@ -1,7 +1,7 @@
 # Calculator
 A  simple calculator that can: add, subtract, multiply and divide.
 
-<a href='https://kessius00.github.io/Calculator/'> Try it out! </a>
+<a href='https://kessius00.github.io/Calculator/' target="_blank"> Try it out! </a>
 
 
 
